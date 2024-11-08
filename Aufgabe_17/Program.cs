@@ -11,23 +11,39 @@ namespace Aufgabe_17
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Bitte gib dein Geburtsdatum ein: ");
-            int date = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Bitte gib ein Geburtsdatum ein: ");
+            DateTime eingabe;
+            if (!DateTime.TryParse(Console.ReadLine(), out eingabe))
+            {
+                Console.WriteLine("Ungültiges Datum.");
+                return;
+            }
 
-            Console.Write("Alter in Jahren: ");
-            int age = Convert.ToInt32(Console.ReadLine());
+            DateTime heute = DateTime.Today;
 
-            int month = age / 12;
-            Console.WriteLine("Alter in Monaten: " + month);
+            int jahre = heute.Year - eingabe.Year;
+            int monate = heute.Month - eingabe.Month;
+            int tage = heute.Day - eingabe.Day;
 
-            int week = month / 4;
-            Console.WriteLine("Alter in Wochen: " + week);
+            if (tage < 0)
+            {
+                monate -= 1;
+                tage += DateTime.DaysInMonth(heute.Year, heute.Month == 1 ? 12 : heute.Month - 1);
+            }
+            if (monate < 0)
+            {
+                jahre -= 1;
+                monate += 12;
+            }
 
-            int days = week / 7;
-            Console.WriteLine("Alter in Tagen: " + days);
-            
+            TimeSpan alter = heute - eingabe;
+            int wochen = alter.Days / 7;
+            int tage_gesamt = alter.Days;
 
-
+            Console.WriteLine("\nAlter in Jahren: {0}", jahre);
+            Console.WriteLine("Alter in Monaten: {0}", jahre * 12 + monate);
+            Console.WriteLine("Alter in Wochen: {0}", wochen);
+            Console.WriteLine("Alter in Tagen: {0}", tage_gesamt);
         }
     }
 }
